@@ -43,6 +43,7 @@ def _lazywhere(cond, arrays, f, fillvalue=None, f2=None):
         if f2 is not None:
             raise ValueError("Only one of (fillvalue, f2) can be given.")
 
+    cond = np.asarray(cond)
     arrays = np.broadcast_arrays(*arrays)
     temp = tuple(np.extract(cond, arr) for arr in arrays)
     tcode = np.mintypecode([a.dtype.char for a in arrays])
