@@ -524,14 +524,10 @@ class rv_frozen(object):
         return self.dist.support(*self.args, **self.kwds)
 
 
-def argsreduce(cond, *args):
-    """Clean arguments to:
-
-    1. Ensure all arguments are iterable (arrays of dimension at least one
-    2. If cond != True and size > 1, ravel(args[i]) where ravel(condition) is
-       True, in 1D.
-
-    Return list of processed arguments.
+# This should be rewritten
+def argsreduce_classic(cond, *args):
+    """Return the sequence of ravel(args[i]) where ravel(condition) is
+    True in 1D.
 
     Examples
     --------
@@ -564,6 +560,38 @@ def argsreduce(cond, *args):
     # if more than one argument.
     if not isinstance(newargs, list):
         newargs = [newargs, ]
+    expand_arr = (cond == cond)
+    return [np.extract(cond, arr1 * expand_arr) for arr1 in newargs]
+    
+def argsreduce_experimental(cond, *args):
+    """Clean arguments to:
+    1. Ensure all arguments are iterable (arrays of dimension at least one
+    2. If cond != True and size > 1, ravel(args[i]) where ravel(condition) is True, in 1D.
+
+    Return list of processed arguments.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> rand = np.random.random_sample
+    >>> A = rand((4, 5))
+    >>> B = 2
+    >>> C = rand((1, 5))
+    >>> cond = np.ones(A.shape)
+    >>> [A1, B1, C1] = argsreduce(cond, A, B, C)
+    >>> B1.shape
+    (20,)
+    >>> cond[2,:] = 0
+    >>> [A2, B2, C2] = argsreduce(cond, A, B, C)
+    >>> B2.shape
+    (15,)
+
+    """
+    newargs = np.atleast_1d(*args)
+    if not isinstance(newargs, list):
+        newargs = [newargs, ]
+    expand_arr = (cond == cond)
+    return [np.extract(cond, arr1 * expand_arr) for arr1 in newargs]
 
     if np.all(cond):
         # Nothing to do
@@ -625,7 +653,7 @@ class rv_generic(object):
     and rv_continuous.
 
     """
-    def __init__(self, seed=None):
+    def __init__(self, seed=None,  argsreduce_method = 'classic'):
         super(rv_generic, self).__init__()
 
         # figure out if _stats signature has 'moments' keyword
@@ -634,6 +662,10 @@ class rv_generic(object):
                                    ('moments' in sig.args) or
                                    ('moments' in sig.kwonlyargs))
         self._random_state = check_random_state(seed)
+        try:
+            self._argsreduce = rv_generic.argsreduce_dict[argsreduce_method]
+        except:
+            raise ValueError("%s is not a valid argsreduce_method")
 
         # For historical reasons, `size` was made an attribute that was read
         # inside _rvs().  The code is being changed so that 'size' is an argument
@@ -647,6 +679,13 @@ class rv_generic(object):
                                          'size' not in argspec.kwonlyargs)
         # Warn on first use only
         self._rvs_size_warned = False
+
+    # Can't call self.argsreduce directly because it takes the wrong number of arguments
+    def argsreduce(self, *args):
+        ret = self._argsreduce(*args)
+        return ret
+    
+    argsreduce_dict = { 'classic': argsreduce_classic,  'experimental': argsreduce_experimental}
 
     @property
     def random_state(self):
@@ -1134,7 +1173,7 @@ class rv_generic(object):
 
         # Use only entries that are valid in calculation
         if np.any(cond):
-            goodargs = argsreduce(cond, *(args+(scale, loc)))
+            goodargs = self.argsreduce(cond, *(args+(scale, loc)))
             scale, loc, goodargs = goodargs[-2], goodargs[-1], goodargs[:-2]
 
             if self._stats_has_moments:
@@ -1241,7 +1280,7 @@ class rv_generic(object):
         cond0 = self._argcheck(*args) & (scale > 0) & (loc == loc)
         output = zeros(shape(cond0), 'd')
         place(output, (1-cond0), self.badvalue)
-        goodargs = argsreduce(cond0, scale, *args)
+        goodargs = self.argsreduce(cond0, scale, *args)
         goodscale = goodargs[0]
         goodargs = goodargs[1:]
         place(output, cond0, self.vecentropy(*goodargs) + log(goodscale))
@@ -1686,15 +1725,17 @@ class rv_continuous(rv_generic):
     """
     def __init__(self, momtype=1, a=None, b=None, xtol=1e-14,
                  badvalue=None, name=None, longname=None,
-                 shapes=None, extradoc=None, seed=None):
+                 shapes=None, extradoc=None, seed=None,
+                argsreduce_method = 'classic'):
 
-        super(rv_continuous, self).__init__(seed)
+        super(rv_continuous, self).__init__(seed, argsreduce_method)
 
         # save the ctor parameters, cf generic freeze
         self._ctor_param = dict(
             momtype=momtype, a=a, b=b, xtol=xtol,
             badvalue=badvalue, name=name, longname=longname,
-            shapes=shapes, extradoc=extradoc, seed=seed)
+            shapes=shapes, extradoc=extradoc, seed=seed,
+            argsreduce_method = argsreduce_method)
 
         if badvalue is None:
             badvalue = nan
@@ -1873,7 +1914,7 @@ class rv_continuous(rv_generic):
         output = zeros(shape(cond), dtyp)
         putmask(output, (1-cond0)+np.isnan(x), self.badvalue)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((x,)+args+(scale,)))
+            goodargs = self.argsreduce(cond, *((x,)+args+(scale,)))
             scale, goodargs = goodargs[-1], goodargs[:-1]
             place(output, cond, self._pdf(*goodargs) / scale)
         if output.ndim == 0:
@@ -1916,7 +1957,7 @@ class rv_continuous(rv_generic):
         output.fill(NINF)
         putmask(output, (1-cond0)+np.isnan(x), self.badvalue)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((x,)+args+(scale,)))
+            goodargs = self.argsreduce(cond, *((x,)+args+(scale,)))
             scale, goodargs = goodargs[-1], goodargs[:-1]
             place(output, cond, self._logpdf(*goodargs) - log(scale))
         if output.ndim == 0:
@@ -1959,7 +2000,7 @@ class rv_continuous(rv_generic):
         place(output, (1-cond0)+np.isnan(x), self.badvalue)
         place(output, cond2, 1.0)
         if np.any(cond):  # call only if at least 1 entry
-            goodargs = argsreduce(cond, *((x,)+args))
+            goodargs = self.argsreduce(cond, *((x,)+args))
             place(output, cond, self._cdf(*goodargs))
         if output.ndim == 0:
             return output[()]
@@ -2002,7 +2043,7 @@ class rv_continuous(rv_generic):
         place(output, (1-cond0)*(cond1 == cond1)+np.isnan(x), self.badvalue)
         place(output, cond2, 0.0)
         if np.any(cond):  # call only if at least 1 entry
-            goodargs = argsreduce(cond, *((x,)+args))
+            goodargs = self.argsreduce(cond, *((x,)+args))
             place(output, cond, self._logcdf(*goodargs))
         if output.ndim == 0:
             return output[()]
@@ -2044,7 +2085,7 @@ class rv_continuous(rv_generic):
         place(output, (1-cond0)+np.isnan(x), self.badvalue)
         place(output, cond2, 1.0)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((x,)+args))
+            goodargs = self.argsreduce(cond, *((x,)+args))
             place(output, cond, self._sf(*goodargs))
         if output.ndim == 0:
             return output[()]
@@ -2090,7 +2131,7 @@ class rv_continuous(rv_generic):
         place(output, (1-cond0)+np.isnan(x), self.badvalue)
         place(output, cond2, 0.0)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((x,)+args))
+            goodargs = self.argsreduce(cond, *((x,)+args))
             place(output, cond, self._logsf(*goodargs))
         if output.ndim == 0:
             return output[()]
@@ -2131,11 +2172,11 @@ class rv_continuous(rv_generic):
 
         lower_bound = _a * scale + loc
         upper_bound = _b * scale + loc
-        place(output, cond2, argsreduce(cond2, lower_bound)[0])
-        place(output, cond3, argsreduce(cond3, upper_bound)[0])
+        place(output, cond2, self.argsreduce(cond2, lower_bound)[0])
+        place(output, cond3, self.argsreduce(cond3, upper_bound)[0])
 
         if np.any(cond):  # call only if at least 1 entry
-            goodargs = argsreduce(cond, *((q,)+args+(scale, loc)))
+            goodargs = self.argsreduce(cond, *((q,)+args+(scale, loc)))
             scale, loc, goodargs = goodargs[-2], goodargs[-1], goodargs[:-2]
             place(output, cond, self._ppf(*goodargs) * scale + loc)
         if output.ndim == 0:
@@ -2177,11 +2218,11 @@ class rv_continuous(rv_generic):
 
         lower_bound = _a * scale + loc
         upper_bound = _b * scale + loc
-        place(output, cond2, argsreduce(cond2, lower_bound)[0])
-        place(output, cond3, argsreduce(cond3, upper_bound)[0])
+        place(output, cond2, self.argsreduce(cond2, lower_bound)[0])
+        place(output, cond3, self.argsreduce(cond3, upper_bound)[0])
 
         if np.any(cond):
-            goodargs = argsreduce(cond, *((q,)+args+(scale, loc)))
+            goodargs = self.argsreduce(cond, *((q,)+args+(scale, loc)))
             scale, loc, goodargs = goodargs[-2], goodargs[-1], goodargs[:-2]
             place(output, cond, self._isf(*goodargs) * scale + loc)
         if output.ndim == 0:
@@ -2221,7 +2262,7 @@ class rv_continuous(rv_generic):
         cond0 = ~self._support_mask(x, *args)
         n_bad = np.count_nonzero(cond0, axis=0)
         if n_bad > 0:
-            x = argsreduce(~cond0, x)[0]
+            x = self.argsreduce(~cond0, x)[0]
         logpdf = self._logpdf(x, *args)
         finite_logpdf = np.isfinite(logpdf)
         n_bad += np.sum(~finite_logpdf, axis=0)
@@ -3017,7 +3058,8 @@ class rv_discrete(rv_generic):
     """
     def __new__(cls, a=0, b=inf, name=None, badvalue=None,
                 moment_tol=1e-8, values=None, inc=1, longname=None,
-                shapes=None, extradoc=None, seed=None):
+                shapes=None, extradoc=None, seed=None,
+                argsreduce_method = 'classic'):
 
         if values is not None:
             # dispatch to a subclass
@@ -3028,15 +3070,17 @@ class rv_discrete(rv_generic):
 
     def __init__(self, a=0, b=inf, name=None, badvalue=None,
                  moment_tol=1e-8, values=None, inc=1, longname=None,
-                 shapes=None, extradoc=None, seed=None):
+                 shapes=None, extradoc=None, seed=None,
+                 argsreduce_method = 'classic'):
 
-        super(rv_discrete, self).__init__(seed)
+        super(rv_discrete, self).__init__(seed, argsreduce_method)
 
         # cf generic freeze
         self._ctor_param = dict(
             a=a, b=b, name=name, badvalue=badvalue,
             moment_tol=moment_tol, values=values, inc=inc,
-            longname=longname, shapes=shapes, extradoc=extradoc, seed=seed)
+            longname=longname, shapes=shapes, extradoc=extradoc, seed=seed,
+            argsreduce_method = argsreduce_method)
 
         if badvalue is None:
             badvalue = nan
@@ -3221,7 +3265,7 @@ class rv_discrete(rv_generic):
         output = zeros(shape(cond), 'd')
         place(output, (1-cond0) + np.isnan(k), self.badvalue)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((k,)+args))
+            goodargs = self.argsreduce(cond, *((k,)+args))
             place(output, cond, np.clip(self._pmf(*goodargs), 0, 1))
         if output.ndim == 0:
             return output[()]
@@ -3259,7 +3303,7 @@ class rv_discrete(rv_generic):
         output.fill(NINF)
         place(output, (1-cond0) + np.isnan(k), self.badvalue)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((k,)+args))
+            goodargs = self.argsreduce(cond, *((k,)+args))
             place(output, cond, self._logpmf(*goodargs))
         if output.ndim == 0:
             return output[()]
@@ -3299,7 +3343,7 @@ class rv_discrete(rv_generic):
         place(output, (1-cond0) + np.isnan(k), self.badvalue)
 
         if np.any(cond):
-            goodargs = argsreduce(cond, *((k,)+args))
+            goodargs = self.argsreduce(cond, *((k,)+args))
             place(output, cond, np.clip(self._cdf(*goodargs), 0, 1))
         if output.ndim == 0:
             return output[()]
@@ -3340,7 +3384,7 @@ class rv_discrete(rv_generic):
         place(output, cond2*(cond0 == cond0), 0.0)
 
         if np.any(cond):
-            goodargs = argsreduce(cond, *((k,)+args))
+            goodargs = self.argsreduce(cond, *((k,)+args))
             place(output, cond, self._logcdf(*goodargs))
         if output.ndim == 0:
             return output[()]
@@ -3379,7 +3423,7 @@ class rv_discrete(rv_generic):
         place(output, (1-cond0) + np.isnan(k), self.badvalue)
         place(output, cond2, 1.0)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((k,)+args))
+            goodargs = self.argsreduce(cond, *((k,)+args))
             place(output, cond, np.clip(self._sf(*goodargs), 0, 1))
         if output.ndim == 0:
             return output[()]
@@ -3422,7 +3466,7 @@ class rv_discrete(rv_generic):
         place(output, (1-cond0) + np.isnan(k), self.badvalue)
         place(output, cond2, 0.0)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((k,)+args))
+            goodargs = self.argsreduce(cond, *((k,)+args))
             place(output, cond, self._logsf(*goodargs))
         if output.ndim == 0:
             return output[()]
@@ -3461,7 +3505,7 @@ class rv_discrete(rv_generic):
         place(output, (q == 0)*(cond == cond), _a-1 + loc)
         place(output, cond2, _b + loc)
         if np.any(cond):
-            goodargs = argsreduce(cond, *((q,)+args+(loc,)))
+            goodargs = self.argsreduce(cond, *((q,)+args+(loc,)))
             loc, goodargs = goodargs[-1], goodargs[:-1]
             place(output, cond, self._ppf(*goodargs) + loc)
 
@@ -3506,7 +3550,7 @@ class rv_discrete(rv_generic):
 
         # call place only if at least 1 valid argument
         if np.any(cond):
-            goodargs = argsreduce(cond, *((q,)+args+(loc,)))
+            goodargs = self.argsreduce(cond, *((q,)+args+(loc,)))
             loc, goodargs = goodargs[-1], goodargs[:-1]
             # PB same as ticket 766
             place(output, cond, self._isf(*goodargs) + loc)
@@ -3695,9 +3739,9 @@ class rv_sample(rv_discrete):
     """
     def __init__(self, a=0, b=inf, name=None, badvalue=None,
                  moment_tol=1e-8, values=None, inc=1, longname=None,
-                 shapes=None, extradoc=None, seed=None):
+                 shapes=None, extradoc=None, seed=None, argsreduce_method = 'classic'):
 
-        super(rv_discrete, self).__init__(seed)
+        super(rv_discrete, self).__init__(seed, argsreduce_method)
 
         if values is None:
             raise ValueError("rv_sample.__init__(..., values=None,...)")
@@ -3706,7 +3750,8 @@ class rv_sample(rv_discrete):
         self._ctor_param = dict(
             a=a, b=b, name=name, badvalue=badvalue,
             moment_tol=moment_tol, values=values, inc=inc,
-            longname=longname, shapes=shapes, extradoc=extradoc, seed=seed)
+            longname=longname, shapes=shapes, extradoc=extradoc, seed=seed,
+            argsreduce_method = argsreduce_method)
 
         if badvalue is None:
             badvalue = nan

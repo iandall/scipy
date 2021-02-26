@@ -22,7 +22,7 @@ from scipy import special
 from scipy._lib._util import check_random_state
 from scipy.integrate import IntegrationWarning, quad, trapezoid
 import scipy.stats as stats
-from scipy.stats._distn_infrastructure import argsreduce
+from scipy.stats._distn_infrastructure import argsreduce_classic,  argsreduce_experimental
 import scipy.stats.distributions
 
 from scipy.special import xlogy, polygamma, entr
@@ -2970,19 +2970,20 @@ class TestEntropy(object):
 
 
 def TestArgsreduce():
-    a = array([1, 3, 2, 1, 2, 3, 3])
-    b, c = argsreduce(a > 1, a, 2)
+    for argsreduce in [ argsreduce_classic,  argsreduce_experimental ]:
+        a = array([1, 3, 2, 1, 2, 3, 3])
+        b, c = argsreduce(a > 1, a, 2)
 
-    assert_array_equal(b, [3, 2, 2, 3, 3])
-    assert_array_equal(c, [2, 2, 2, 2, 2])
+        assert_array_equal(b, [3, 2, 2, 3, 3])
+        assert_array_equal(c, [2, 2, 2, 2, 2])
 
-    b, c = argsreduce(2 > 1, a, 2)
-    assert_array_equal(b, a[0])
-    assert_array_equal(c, [2])
+        b, c = argsreduce(2 > 1, a, 2)
+        assert_array_equal(b, a[0])
+        assert_array_equal(c, [2])
 
-    b, c = argsreduce(a > 0, a, 2)
-    assert_array_equal(b, a)
-    assert_array_equal(c, [2] * numpy.size(a))
+        b, c = argsreduce(a > 0, a, 2)
+        assert_array_equal(b, a)
+        assert_array_equal(c, [2] * numpy.size(a))
 
 
 class TestFitMethod(object):
