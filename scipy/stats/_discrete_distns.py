@@ -97,7 +97,7 @@ class binom_gen(rv_discrete):
         return np.sum(entr(vals), axis=0)
 
 
-binom = binom_gen(name='binom')
+binom = binom_gen(name='binom',  argsreduce_method = 'experimental')
 
 
 class bernoulli_gen(binom_gen):
@@ -159,7 +159,7 @@ class bernoulli_gen(binom_gen):
         return entr(p) + entr(1-p)
 
 
-bernoulli = bernoulli_gen(b=1, name='bernoulli')
+bernoulli = bernoulli_gen(b=1, name='bernoulli',  argsreduce_method = 'experimental')
 
 
 class betabinom_gen(rv_discrete):
@@ -240,7 +240,7 @@ class betabinom_gen(rv_discrete):
         return mu, var, g1, g2
 
 
-betabinom = betabinom_gen(name='betabinom')
+betabinom = betabinom_gen(name='betabinom',  argsreduce_method = 'experimental')
 
 
 class nbinom_gen(rv_discrete):
@@ -347,7 +347,7 @@ class nbinom_gen(rv_discrete):
         return mu, var, g1, g2
 
 
-nbinom = nbinom_gen(name='nbinom')
+nbinom = nbinom_gen(name='nbinom',  argsreduce_method = 'experimental')
 
 
 class geom_gen(rv_discrete):
@@ -415,7 +415,7 @@ class geom_gen(rv_discrete):
         return mu, var, g1, g2
 
 
-geom = geom_gen(a=1, name='geom', longname="A geometric")
+geom = geom_gen(a=1, name='geom', longname="A geometric",  argsreduce_method = 'experimental')
 
 
 class hypergeom_gen(rv_discrete):
@@ -568,7 +568,7 @@ class hypergeom_gen(rv_discrete):
         return np.asarray(res)
 
 
-hypergeom = hypergeom_gen(name='hypergeom')
+hypergeom = hypergeom_gen(name='hypergeom',  argsreduce_method = 'experimental')
 
 
 class nhypergeom_gen(rv_discrete):
@@ -706,7 +706,7 @@ class nhypergeom_gen(rv_discrete):
         return mu, var, g1, g2
 
 
-nhypergeom = nhypergeom_gen(name='nhypergeom')
+nhypergeom = nhypergeom_gen(name='nhypergeom',  argsreduce_method = 'experimental')
 
 
 # FIXME: Fails _cdfvec
@@ -762,7 +762,7 @@ class logser_gen(rv_discrete):
         return mu, var, g1, g2
 
 
-logser = logser_gen(a=1, name='logser', longname='A logarithmic')
+logser = logser_gen(a=1, name='logser', longname='A logarithmic',  argsreduce_method = 'experimental')
 
 
 class poisson_gen(rv_discrete):
@@ -828,7 +828,7 @@ class poisson_gen(rv_discrete):
         return mu, var, g1, g2
 
 
-poisson = poisson_gen(name="poisson", longname='A Poisson')
+poisson = poisson_gen(name="poisson", longname='A Poisson',  argsreduce_method = 'experimental')
 
 
 class planck_gen(rv_discrete):
@@ -899,7 +899,7 @@ class planck_gen(rv_discrete):
         return lambda_*exp(-lambda_)/C - log(C)
 
 
-planck = planck_gen(a=0, name='planck', longname='A discrete exponential ')
+planck = planck_gen(a=0, name='planck', longname='A discrete exponential ',  argsreduce_method = 'experimental')
 
 
 class boltzmann_gen(rv_discrete):
@@ -962,7 +962,7 @@ class boltzmann_gen(rv_discrete):
 
 
 boltzmann = boltzmann_gen(name='boltzmann', a=0,
-                          longname='A truncated discrete exponential ')
+                          longname='A truncated discrete exponential ',  argsreduce_method = 'experimental')
 
 
 class randint_gen(rv_discrete):
@@ -1040,7 +1040,7 @@ class randint_gen(rv_discrete):
 
 
 randint = randint_gen(name='randint', longname='A discrete uniform '
-                      '(random integer)')
+                      '(random integer)',  argsreduce_method = 'experimental')
 
 
 # FIXME: problems sampling.
@@ -1104,7 +1104,7 @@ class zipf_gen(rv_discrete):
             np.inf)
 
 
-zipf = zipf_gen(a=1, name='zipf', longname='A Zipf')
+zipf = zipf_gen(a=1, name='zipf', longname='A Zipf',  argsreduce_method = 'experimental')
 
 
 def _gen_harmonic_gt1(n, a):
@@ -1214,7 +1214,7 @@ class zipfian_gen(rv_discrete):
         g2 -= 3
         return mu1, mu2, g1, g2
 
-zipfian = zipfian_gen(a=1, name='zipfian', longname='A Zipfian')
+zipfian = zipfian_gen(a=1, name='zipfian', longname='A Zipfian',  argsreduce_method = 'experimental')
 
 
 class dlaplace_gen(rv_discrete):
@@ -1289,7 +1289,7 @@ class dlaplace_gen(rv_discrete):
 
 
 dlaplace = dlaplace_gen(a=-np.inf,
-                        name='dlaplace', longname='A discrete Laplacian')
+                        name='dlaplace', longname='A discrete Laplacian',  argsreduce_method = 'experimental')
 
 
 class skellam_gen(rv_discrete):
@@ -1349,7 +1349,7 @@ class skellam_gen(rv_discrete):
         return mean, var, g1, g2
 
 
-skellam = skellam_gen(a=-np.inf, name="skellam", longname='A Skellam')
+skellam = skellam_gen(a=-np.inf, name="skellam", longname='A Skellam',  argsreduce_method = 'experimental')
 
 
 class yulesimon_gen(rv_discrete):
@@ -1427,7 +1427,7 @@ class yulesimon_gen(rv_discrete):
         return mu, mu2, g1, g2
 
 
-yulesimon = yulesimon_gen(name='yulesimon', a=1)
+yulesimon = yulesimon_gen(name='yulesimon', a=1,  argsreduce_method = 'experimental')
 
 
 def _vectorize_rvs_over_shapes(_rvs1):
@@ -1611,7 +1611,7 @@ class nchypergeom_fisher_gen(_nchypergeom_gen):
 
 nchypergeom_fisher = nchypergeom_fisher_gen(
     name='nchypergeom_fisher',
-    longname="A Fisher's noncentral hypergeometric")
+    longname="A Fisher's noncentral hypergeometric",  argsreduce_method = 'experimental')
 
 
 class nchypergeom_wallenius_gen(_nchypergeom_gen):
@@ -1694,7 +1694,7 @@ class nchypergeom_wallenius_gen(_nchypergeom_gen):
 
 nchypergeom_wallenius = nchypergeom_wallenius_gen(
     name='nchypergeom_wallenius',
-    longname="A Wallenius' noncentral hypergeometric")
+    longname="A Wallenius' noncentral hypergeometric",  argsreduce_method = 'experimental')
 
 
 # Collect names of classes and objects in this module.

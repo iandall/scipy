@@ -231,7 +231,7 @@ class kstwobign_gen(rv_continuous):
         return sc.kolmogi(q)
 
 
-kstwobign = kstwobign_gen(a=0.0, name='kstwobign')
+kstwobign = kstwobign_gen(a=0.0, name='kstwobign',  argsreduce_method = 'experimental')
 
 
 ## Normal distribution
@@ -383,7 +383,7 @@ class norm_gen(rv_continuous):
             return 0.
 
 
-norm = norm_gen(name='norm')
+norm = norm_gen(name='norm',  argsreduce_method = 'experimental')
 
 
 class alpha_gen(rv_continuous):
@@ -437,7 +437,7 @@ class alpha_gen(rv_continuous):
         return [np.inf]*2 + [np.nan]*2
 
 
-alpha = alpha_gen(a=0.0, name='alpha')
+alpha = alpha_gen(a=0.0, name='alpha',  argsreduce_method = 'experimental')
 
 
 class anglit_gen(rv_continuous):
@@ -477,7 +477,7 @@ class anglit_gen(rv_continuous):
         return 1-np.log(2)
 
 
-anglit = anglit_gen(a=-np.pi/4, b=np.pi/4, name='anglit')
+anglit = anglit_gen(a=-np.pi/4, b=np.pi/4, name='anglit',  argsreduce_method = 'experimental')
 
 
 class arcsine_gen(rv_continuous):
@@ -521,7 +521,7 @@ class arcsine_gen(rv_continuous):
         return -0.24156447527049044468
 
 
-arcsine = arcsine_gen(a=0.0, b=1.0, name='arcsine')
+arcsine = arcsine_gen(a=0.0, b=1.0, name='arcsine',  argsreduce_method = 'experimental')
 
 
 class FitDataError(ValueError):
@@ -743,7 +743,7 @@ class beta_gen(rv_continuous):
         return a, b, floc, fscale
 
 
-beta = beta_gen(a=0.0, b=1.0, name='beta')
+beta = beta_gen(a=0.0, b=1.0, name='beta',  argsreduce_method = 'experimental')
 
 
 class betaprime_gen(rv_continuous):
@@ -808,7 +808,7 @@ class betaprime_gen(rv_continuous):
             raise NotImplementedError
 
 
-betaprime = betaprime_gen(a=0.0, name='betaprime')
+betaprime = betaprime_gen(a=0.0, name='betaprime',  argsreduce_method = 'experimental')
 
 
 class bradford_gen(rv_continuous):
@@ -863,7 +863,7 @@ class bradford_gen(rv_continuous):
         return k/2.0 - np.log(c/k)
 
 
-bradford = bradford_gen(a=0.0, b=1.0, name='bradford')
+bradford = bradford_gen(a=0.0, b=1.0, name='bradford',  argsreduce_method = 'experimental')
 
 
 class burr_gen(rv_continuous):
@@ -982,7 +982,7 @@ class burr_gen(rv_continuous):
                           np.nan)
 
 
-burr = burr_gen(a=0.0, name='burr')
+burr = burr_gen(a=0.0, name='burr',  argsreduce_method = 'experimental')
 
 
 class burr12_gen(rv_continuous):
@@ -1059,7 +1059,7 @@ class burr12_gen(rv_continuous):
         return d * sc.beta(1.0 + nc, d - nc)
 
 
-burr12 = burr12_gen(a=0.0, name='burr12')
+burr12 = burr12_gen(a=0.0, name='burr12',  argsreduce_method = 'experimental')
 
 
 class fisk_gen(burr_gen):
@@ -1125,7 +1125,7 @@ class fisk_gen(burr_gen):
         return 2 - np.log(c)
 
 
-fisk = fisk_gen(a=0.0, name='fisk')
+fisk = fisk_gen(a=0.0, name='fisk',  argsreduce_method = 'experimental')
 
 
 class cauchy_gen(rv_continuous):
@@ -1176,7 +1176,7 @@ class cauchy_gen(rv_continuous):
         return p50, (p75 - p25)/2
 
 
-cauchy = cauchy_gen(name='cauchy')
+cauchy = cauchy_gen(name='cauchy',  argsreduce_method = 'experimental')
 
 
 class chi_gen(rv_continuous):
@@ -1239,7 +1239,7 @@ class chi_gen(rv_continuous):
         return mu, mu2, g1, g2
 
 
-chi = chi_gen(a=0.0, name='chi')
+chi = chi_gen(a=0.0, name='chi',  argsreduce_method = 'experimental')
 
 
 class chi2_gen(rv_continuous):
@@ -1306,7 +1306,7 @@ class chi2_gen(rv_continuous):
         return mu, mu2, g1, g2
 
 
-chi2 = chi2_gen(a=0.0, name='chi2')
+chi2 = chi2_gen(a=0.0, name='chi2',  argsreduce_method = 'experimental')
 
 
 class cosine_gen(rv_continuous):
@@ -1401,7 +1401,7 @@ class dgamma_gen(rv_continuous):
         return 0.0, mu2, 0.0, (a+2.0)*(a+3.0)/mu2-3.0
 
 
-dgamma = dgamma_gen(name='dgamma')
+dgamma = dgamma_gen(name='dgamma',  argsreduce_method = 'experimental')
 
 
 class dweibull_gen(rv_continuous):
@@ -1460,7 +1460,7 @@ class dweibull_gen(rv_continuous):
         return 0, None, 0, None
 
 
-dweibull = dweibull_gen(name='dweibull')
+dweibull = dweibull_gen(name='dweibull',  argsreduce_method = 'experimental')
 
 
 class expon_gen(rv_continuous):
@@ -1569,7 +1569,7 @@ class expon_gen(rv_continuous):
         return float(loc), float(scale)
 
 
-expon = expon_gen(a=0.0, name='expon')
+expon = expon_gen(a=0.0, name='expon',  argsreduce_method = 'experimental')
 
 
 class exponnorm_gen(rv_continuous):
@@ -1711,7 +1711,7 @@ class exponweib_gen(rv_continuous):
         return (-sc.log1p(-q**(1.0/a)))**np.asarray(1.0/c)
 
 
-exponweib = exponweib_gen(a=0.0, name='exponweib')
+exponweib = exponweib_gen(a=0.0, name='exponweib',  argsreduce_method = 'experimental')
 
 
 class exponpow_gen(rv_continuous):
@@ -1764,7 +1764,7 @@ class exponpow_gen(rv_continuous):
         return pow(sc.log1p(-sc.log1p(-q)), 1.0/b)
 
 
-exponpow = exponpow_gen(a=0.0, name='exponpow')
+exponpow = exponpow_gen(a=0.0, name='exponpow',  argsreduce_method = 'experimental')
 
 
 class fatiguelife_gen(rv_continuous):
@@ -1841,7 +1841,7 @@ class fatiguelife_gen(rv_continuous):
         return mu, mu2, g1, g2
 
 
-fatiguelife = fatiguelife_gen(a=0.0, name='fatiguelife')
+fatiguelife = fatiguelife_gen(a=0.0, name='fatiguelife',  argsreduce_method = 'experimental')
 
 
 class foldcauchy_gen(rv_continuous):
@@ -1968,7 +1968,7 @@ class f_gen(rv_continuous):
         return mu, mu2, g1, g2
 
 
-f = f_gen(a=0.0, name='f')
+f = f_gen(a=0.0, name='f',  argsreduce_method = 'experimental')
 
 
 ## Folded Normal
@@ -2105,7 +2105,7 @@ class weibull_min_gen(rv_continuous):
         return -_EULER / c - np.log(c) + _EULER + 1
 
 
-weibull_min = weibull_min_gen(a=0.0, name='weibull_min')
+weibull_min = weibull_min_gen(a=0.0, name='weibull_min',  argsreduce_method = 'experimental')
 
 
 class weibull_max_gen(rv_continuous):
@@ -2176,7 +2176,7 @@ class weibull_max_gen(rv_continuous):
         return -_EULER / c - np.log(c) + _EULER + 1
 
 
-weibull_max = weibull_max_gen(b=0.0, name='weibull_max')
+weibull_max = weibull_max_gen(b=0.0, name='weibull_max',  argsreduce_method = 'experimental')
 
 
 class genlogistic_gen(rv_continuous):
@@ -2232,7 +2232,7 @@ class genlogistic_gen(rv_continuous):
         return mu, mu2, g1, g2
 
 
-genlogistic = genlogistic_gen(name='genlogistic')
+genlogistic = genlogistic_gen(name='genlogistic',  argsreduce_method = 'experimental')
 
 
 class genpareto_gen(rv_continuous):
@@ -2352,7 +2352,7 @@ class genpareto_gen(rv_continuous):
         return 1. + c
 
 
-genpareto = genpareto_gen(a=0.0, name='genpareto')
+genpareto = genpareto_gen(a=0.0, name='genpareto',  argsreduce_method = 'experimental')
 
 
 class genexpon_gen(rv_continuous):
@@ -2540,7 +2540,7 @@ class genextreme_gen(rv_continuous):
         return _EULER*(1 - c) + 1
 
 
-genextreme = genextreme_gen(name='genextreme')
+genextreme = genextreme_gen(name='genextreme',  argsreduce_method = 'experimental')
 
 
 def _digammainv(y):
@@ -2742,7 +2742,7 @@ class gamma_gen(rv_continuous):
         return a, floc, scale
 
 
-gamma = gamma_gen(a=0.0, name='gamma')
+gamma = gamma_gen(a=0.0, name='gamma',  argsreduce_method = 'experimental')
 
 
 class erlang_gen(gamma_gen):
@@ -2802,7 +2802,7 @@ class erlang_gen(gamma_gen):
             """)
 
 
-erlang = erlang_gen(a=0.0, name='erlang')
+erlang = erlang_gen(a=0.0, name='erlang',  argsreduce_method = 'experimental')
 
 
 class gengamma_gen(rv_continuous):
@@ -2881,7 +2881,7 @@ class gengamma_gen(rv_continuous):
         return a*(1-val) + 1.0/c*val + sc.gammaln(a) - np.log(abs(c))
 
 
-gengamma = gengamma_gen(a=0.0, name='gengamma')
+gengamma = gengamma_gen(a=0.0, name='gengamma',  argsreduce_method = 'experimental')
 
 
 class genhalflogistic_gen(rv_continuous):
@@ -2934,7 +2934,7 @@ class genhalflogistic_gen(rv_continuous):
         return 2 - (2*c+1)*np.log(2)
 
 
-genhalflogistic = genhalflogistic_gen(a=0.0, name='genhalflogistic')
+genhalflogistic = genhalflogistic_gen(a=0.0, name='genhalflogistic',  argsreduce_method = 'experimental')
 
 
 class gompertz_gen(rv_continuous):
@@ -2976,7 +2976,7 @@ class gompertz_gen(rv_continuous):
         return 1.0 - np.log(c) - np.exp(c)*sc.expn(1, c)
 
 
-gompertz = gompertz_gen(a=0.0, name='gompertz')
+gompertz = gompertz_gen(a=0.0, name='gompertz',  argsreduce_method = 'experimental')
 
 
 def _average_with_log_weights(x, logweights):
@@ -3078,7 +3078,7 @@ class gumbel_r_gen(rv_continuous):
         return loc, scale
 
 
-gumbel_r = gumbel_r_gen(name='gumbel_r')
+gumbel_r = gumbel_r_gen(name='gumbel_r',  argsreduce_method = 'experimental')
 
 
 class gumbel_l_gen(rv_continuous):
@@ -3149,7 +3149,7 @@ class gumbel_l_gen(rv_continuous):
         return (-loc_r, scale_r)
 
 
-gumbel_l = gumbel_l_gen(name='gumbel_l')
+gumbel_l = gumbel_l_gen(name='gumbel_l',  argsreduce_method = 'experimental')
 
 
 class halfcauchy_gen(rv_continuous):
@@ -3192,7 +3192,7 @@ class halfcauchy_gen(rv_continuous):
         return np.log(2*np.pi)
 
 
-halfcauchy = halfcauchy_gen(a=0.0, name='halfcauchy')
+halfcauchy = halfcauchy_gen(a=0.0, name='halfcauchy',  argsreduce_method = 'experimental')
 
 
 class halflogistic_gen(rv_continuous):
@@ -3245,7 +3245,7 @@ class halflogistic_gen(rv_continuous):
         return 2-np.log(2)
 
 
-halflogistic = halflogistic_gen(a=0.0, name='halflogistic')
+halflogistic = halflogistic_gen(a=0.0, name='halflogistic',  argsreduce_method = 'experimental')
 
 
 class halfnorm_gen(rv_continuous):
@@ -3296,7 +3296,7 @@ class halfnorm_gen(rv_continuous):
         return 0.5*np.log(np.pi/2.0)+0.5
 
 
-halfnorm = halfnorm_gen(a=0.0, name='halfnorm')
+halfnorm = halfnorm_gen(a=0.0, name='halfnorm',  argsreduce_method = 'experimental')
 
 
 class hypsecant_gen(rv_continuous):
@@ -3336,7 +3336,7 @@ class hypsecant_gen(rv_continuous):
         return np.log(2*np.pi)
 
 
-hypsecant = hypsecant_gen(name='hypsecant')
+hypsecant = hypsecant_gen(name='hypsecant',  argsreduce_method = 'experimental')
 
 
 class gausshyper_gen(rv_continuous):
@@ -3458,7 +3458,7 @@ class invgamma_gen(rv_continuous):
         return a - (a+1.0) * sc.psi(a) + sc.gammaln(a)
 
 
-invgamma = invgamma_gen(a=0.0, name='invgamma')
+invgamma = invgamma_gen(a=0.0, name='invgamma',  argsreduce_method = 'experimental')
 
 
 class invgauss_gen(rv_continuous):
@@ -3851,7 +3851,7 @@ class geninvgauss_gen(rv_continuous):
         return m
 
 
-geninvgauss = geninvgauss_gen(a=0.0, name="geninvgauss")
+geninvgauss = geninvgauss_gen(a=0.0, name="geninvgauss",  argsreduce_method = 'experimental')
 
 
 class norminvgauss_gen(rv_continuous):
@@ -3922,7 +3922,7 @@ class norminvgauss_gen(rv_continuous):
         return mean, variance, skewness, kurtosis
 
 
-norminvgauss = norminvgauss_gen(name="norminvgauss")
+norminvgauss = norminvgauss_gen(name="norminvgauss",  argsreduce_method = 'experimental')
 
 
 class invweibull_gen(rv_continuous):
@@ -3978,7 +3978,7 @@ class invweibull_gen(rv_continuous):
         return 1+_EULER + _EULER / c - np.log(c)
 
 
-invweibull = invweibull_gen(a=0, name='invweibull')
+invweibull = invweibull_gen(a=0, name='invweibull',  argsreduce_method = 'experimental')
 
 
 class johnsonsb_gen(rv_continuous):
@@ -4026,7 +4026,7 @@ class johnsonsb_gen(rv_continuous):
         return 1.0 / (1 + np.exp(-1.0 / b * (_norm_ppf(q) - a)))
 
 
-johnsonsb = johnsonsb_gen(a=0.0, b=1.0, name='johnsonsb')
+johnsonsb = johnsonsb_gen(a=0.0, b=1.0, name='johnsonsb',  argsreduce_method = 'experimental')
 
 
 class johnsonsu_gen(rv_continuous):
@@ -4074,7 +4074,7 @@ class johnsonsu_gen(rv_continuous):
         return np.sinh((_norm_ppf(q) - a) / b)
 
 
-johnsonsu = johnsonsu_gen(name='johnsonsu')
+johnsonsu = johnsonsu_gen(name='johnsonsu',  argsreduce_method = 'experimental')
 
 
 class laplace_gen(rv_continuous):
@@ -4137,7 +4137,7 @@ class laplace_gen(rv_continuous):
         return floc, fscale
 
 
-laplace = laplace_gen(name='laplace')
+laplace = laplace_gen(name='laplace',  argsreduce_method = 'experimental')
 
 
 class laplace_asymmetric_gen(rv_continuous):
@@ -4228,7 +4228,7 @@ class laplace_asymmetric_gen(rv_continuous):
         return 1 + np.log(kappa+1/kappa)
 
 
-laplace_asymmetric = laplace_asymmetric_gen(name='laplace_asymmetric')
+laplace_asymmetric = laplace_asymmetric_gen(name='laplace_asymmetric',  argsreduce_method = 'experimental')
 
 
 def _check_fit_input_parameters(dist, data, args, kwds):
@@ -4326,7 +4326,7 @@ class levy_gen(rv_continuous):
         return np.inf, np.inf, np.nan, np.nan
 
 
-levy = levy_gen(a=0.0, name="levy")
+levy = levy_gen(a=0.0, name="levy",  argsreduce_method = 'experimental')
 
 
 class levy_l_gen(rv_continuous):
@@ -4381,7 +4381,7 @@ class levy_l_gen(rv_continuous):
         return np.inf, np.inf, np.nan, np.nan
 
 
-levy_l = levy_l_gen(b=0.0, name="levy_l")
+levy_l = levy_l_gen(b=0.0, name="levy_l",  argsreduce_method = 'experimental')
 
 
 class levy_stable_gen(rv_continuous):
@@ -4948,7 +4948,7 @@ class logistic_gen(rv_continuous):
         return tuple(optimize.root(func, (loc, scale), args=(data,)).x)
 
 
-logistic = logistic_gen(name='logistic')
+logistic = logistic_gen(name='logistic',  argsreduce_method = 'experimental')
 
 
 class loggamma_gen(rv_continuous):
@@ -5007,7 +5007,7 @@ class loggamma_gen(rv_continuous):
         return mean, var, skewness, excess_kurtosis
 
 
-loggamma = loggamma_gen(name='loggamma')
+loggamma = loggamma_gen(name='loggamma',  argsreduce_method = 'experimental')
 
 
 class loglaplace_gen(rv_continuous):
@@ -5059,7 +5059,7 @@ class loglaplace_gen(rv_continuous):
         return np.log(2.0/c) + 1.0
 
 
-loglaplace = loglaplace_gen(a=0.0, name='loglaplace')
+loglaplace = loglaplace_gen(a=0.0, name='loglaplace',  argsreduce_method = 'experimental')
 
 
 def _lognorm_logpdf(x, s):
@@ -5205,7 +5205,7 @@ class lognorm_gen(rv_continuous):
         return shape, floc, scale
 
 
-lognorm = lognorm_gen(a=0.0, name='lognorm')
+lognorm = lognorm_gen(a=0.0, name='lognorm',  argsreduce_method = 'experimental')
 
 
 class gilbrat_gen(rv_continuous):
@@ -5258,7 +5258,7 @@ class gilbrat_gen(rv_continuous):
         return 0.5 * np.log(2 * np.pi) + 0.5
 
 
-gilbrat = gilbrat_gen(a=0.0, name='gilbrat')
+gilbrat = gilbrat_gen(a=0.0, name='gilbrat',  argsreduce_method = 'experimental')
 
 
 class maxwell_gen(rv_continuous):
@@ -5315,7 +5315,7 @@ class maxwell_gen(rv_continuous):
         return _EULER + 0.5*np.log(2*np.pi)-0.5
 
 
-maxwell = maxwell_gen(a=0.0, name='maxwell')
+maxwell = maxwell_gen(a=0.0, name='maxwell',  argsreduce_method = 'experimental')
 
 
 class mielke_gen(rv_continuous):
@@ -5376,7 +5376,7 @@ class mielke_gen(rv_continuous):
         return _lazywhere(n < s, (n, k, s), nth_moment, np.inf)
 
 
-mielke = mielke_gen(a=0.0, name='mielke')
+mielke = mielke_gen(a=0.0, name='mielke',  argsreduce_method = 'experimental')
 
 
 class kappa4_gen(rv_continuous):
@@ -5686,7 +5686,7 @@ class kappa3_gen(rv_continuous):
         return outputs[:]
 
 
-kappa3 = kappa3_gen(a=0.0, name='kappa3')
+kappa3 = kappa3_gen(a=0.0, name='kappa3',  argsreduce_method = 'experimental')
 
 
 class moyal_gen(rv_continuous):
@@ -5777,7 +5777,7 @@ class moyal_gen(rv_continuous):
             return self._mom1_sc(n)
 
 
-moyal = moyal_gen(name="moyal")
+moyal = moyal_gen(name="moyal",  argsreduce_method = 'experimental')
 
 
 class nakagami_gen(rv_continuous):
@@ -5841,7 +5841,7 @@ class nakagami_gen(rv_continuous):
         return args + (loc, scale)
 
 
-nakagami = nakagami_gen(a=0.0, name="nakagami")
+nakagami = nakagami_gen(a=0.0, name="nakagami",  argsreduce_method = 'experimental')
 
 
 class ncx2_gen(rv_continuous):
@@ -6001,7 +6001,7 @@ class ncf_gen(rv_continuous):
         return mu, mu2, None, None
 
 
-ncf = ncf_gen(a=0.0, name='ncf')
+ncf = ncf_gen(a=0.0, name='ncf',  argsreduce_method = 'experimental')
 
 
 class t_gen(rv_continuous):
@@ -6089,7 +6089,7 @@ class t_gen(rv_continuous):
                 + np.log(np.sqrt(df)*sc.beta(half, 0.5)))
 
 
-t = t_gen(name='t')
+t = t_gen(name='t',  argsreduce_method = 'experimental')
 
 
 class nct_gen(rv_continuous):
@@ -6270,7 +6270,7 @@ class pareto_gen(rv_continuous):
         return fshape, floc, fscale
 
 
-pareto = pareto_gen(a=1.0, name="pareto")
+pareto = pareto_gen(a=1.0, name="pareto",  argsreduce_method = 'experimental')
 
 
 class lomax_gen(rv_continuous):
@@ -6324,7 +6324,7 @@ class lomax_gen(rv_continuous):
         return 1+1.0/c-np.log(c)
 
 
-lomax = lomax_gen(a=0.0, name="lomax")
+lomax = lomax_gen(a=0.0, name="lomax",  argsreduce_method = 'experimental')
 
 
 class pearson3_gen(rv_continuous):
@@ -6501,7 +6501,7 @@ class pearson3_gen(rv_continuous):
             return super(type(self), self).fit(data, *args, **kwds)
 
 
-pearson3 = pearson3_gen(name="pearson3")
+pearson3 = pearson3_gen(name="pearson3",  argsreduce_method = 'experimental')
 
 
 class powerlaw_gen(rv_continuous):
@@ -6554,7 +6554,7 @@ class powerlaw_gen(rv_continuous):
         return 1 - 1.0/a - np.log(a)
 
 
-powerlaw = powerlaw_gen(a=0.0, b=1.0, name="powerlaw")
+powerlaw = powerlaw_gen(a=0.0, b=1.0, name="powerlaw",  argsreduce_method = 'experimental')
 
 
 class powerlognorm_gen(rv_continuous):
@@ -6596,7 +6596,7 @@ class powerlognorm_gen(rv_continuous):
         return np.exp(-s * _norm_ppf(pow(1.0 - q, 1.0 / c)))
 
 
-powerlognorm = powerlognorm_gen(a=0.0, name="powerlognorm")
+powerlognorm = powerlognorm_gen(a=0.0, name="powerlognorm",  argsreduce_method = 'experimental')
 
 
 class powernorm_gen(rv_continuous):
@@ -6636,7 +6636,7 @@ class powernorm_gen(rv_continuous):
         return -_norm_ppf(pow(1.0 - q, 1.0 / c))
 
 
-powernorm = powernorm_gen(name='powernorm')
+powernorm = powernorm_gen(name='powernorm',  argsreduce_method = 'experimental')
 
 
 class rdist_gen(rv_continuous):
@@ -6694,7 +6694,7 @@ class rdist_gen(rv_continuous):
         return numerator / sc.beta(1. / 2, c / 2.)
 
 
-rdist = rdist_gen(a=-1.0, b=1.0, name="rdist")
+rdist = rdist_gen(a=-1.0, b=1.0, name="rdist",  argsreduce_method = 'experimental')
 
 
 def _rayleigh_fit_check_error(ier, msg):
@@ -6824,7 +6824,7 @@ class rayleigh_gen(rv_continuous):
             return x[0], scale_mle(x[0], data)
 
 
-rayleigh = rayleigh_gen(a=0.0, name="rayleigh")
+rayleigh = rayleigh_gen(a=0.0, name="rayleigh",  argsreduce_method = 'experimental')
 
 
 class reciprocal_gen(rv_continuous):
@@ -6904,8 +6904,8 @@ class reciprocal_gen(rv_continuous):
         return 0.5*np.log(a*b)+np.log(np.log(b*1.0/a))
 
 
-loguniform = reciprocal_gen(name="loguniform")
-reciprocal = reciprocal_gen(name="reciprocal")
+loguniform = reciprocal_gen(name="loguniform",  argsreduce_method = 'experimental')
+reciprocal = reciprocal_gen(name="reciprocal",  argsreduce_method = 'experimental')
 
 
 class rice_gen(rv_continuous):
@@ -6968,7 +6968,7 @@ class rice_gen(rv_continuous):
                 sc.hyp1f1(n1, 1, b2))
 
 
-rice = rice_gen(a=0.0, name="rice")
+rice = rice_gen(a=0.0, name="rice",  argsreduce_method = 'experimental')
 
 
 class recipinvgauss_gen(rv_continuous):
@@ -7073,7 +7073,7 @@ class semicircular_gen(rv_continuous):
         return 0.64472988584940017414
 
 
-semicircular = semicircular_gen(a=-1.0, b=1.0, name="semicircular")
+semicircular = semicircular_gen(a=-1.0, b=1.0, name="semicircular",  argsreduce_method = 'experimental')
 
 
 class skewcauchy_gen(rv_continuous):
@@ -7139,7 +7139,7 @@ class skewcauchy_gen(rv_continuous):
         return 0.0, p50, (p75 - p25)/2
 
 
-skewcauchy = skewcauchy_gen(name='skewcauchy')
+skewcauchy = skewcauchy_gen(name='skewcauchy',  argsreduce_method = 'experimental')
 
 
 class skew_norm_gen(rv_continuous):
@@ -7317,7 +7317,7 @@ class trapezoid_gen(rv_continuous):
         return 0.5 * (1.0-d+c) / (1.0+d-c) + np.log(0.5 * (1.0+d-c))
 
 
-trapezoid = trapezoid_gen(a=0.0, b=1.0, name="trapezoid")
+trapezoid = trapezoid_gen(a=0.0, b=1.0, name="trapezoid",  argsreduce_method = 'experimental')
 # Note: alias kept for backwards compatibility. Rename was done
 # because trapz is a slur in colloquial English (see gh-12924).
 trapz = trapezoid_gen(a=0.0, b=1.0, name="trapz")
@@ -7456,7 +7456,7 @@ class truncexpon_gen(rv_continuous):
         return np.log(eB-1)+(1+eB*(b-1.0))/(1.0-eB)
 
 
-truncexpon = truncexpon_gen(a=0.0, name='truncexpon')
+truncexpon = truncexpon_gen(a=0.0, name='truncexpon',  argsreduce_method = 'experimental')
 
 
 TRUNCNORM_TAIL_X = 30
@@ -8019,7 +8019,7 @@ class truncnorm_gen(rv_continuous):
         return rvs
 
 
-truncnorm = truncnorm_gen(name='truncnorm', momtype=1)
+truncnorm = truncnorm_gen(name='truncnorm', momtype=1,  argsreduce_method = 'experimental')
 
 
 class tukeylambda_gen(rv_continuous):
@@ -8069,7 +8069,7 @@ class tukeylambda_gen(rv_continuous):
         return integrate.quad(integ, 0, 1)[0]
 
 
-tukeylambda = tukeylambda_gen(name='tukeylambda')
+tukeylambda = tukeylambda_gen(name='tukeylambda',  argsreduce_method = 'experimental')
 
 
 class FitUniformFixedScaleDataError(FitDataError):
@@ -8261,7 +8261,7 @@ class uniform_gen(rv_continuous):
         return float(loc), float(scale)
 
 
-uniform = uniform_gen(a=0.0, b=1.0, name='uniform')
+uniform = uniform_gen(a=0.0, b=1.0, name='uniform',  argsreduce_method = 'experimental')
 
 
 class vonmises_gen(rv_continuous):
@@ -8428,7 +8428,7 @@ class wrapcauchy_gen(rv_continuous):
         return 0.5, np.min(data), np.ptp(data)/(2*np.pi)
 
 
-wrapcauchy = wrapcauchy_gen(a=0.0, b=2*np.pi, name='wrapcauchy')
+wrapcauchy = wrapcauchy_gen(a=0.0, b=2*np.pi, name='wrapcauchy',  argsreduce_method = 'experimental')
 
 
 class gennorm_gen(rv_continuous):
@@ -8496,7 +8496,7 @@ class gennorm_gen(rv_continuous):
         return 1. / beta - np.log(.5 * beta) + sc.gammaln(1. / beta)
 
 
-gennorm = gennorm_gen(name='gennorm')
+gennorm = gennorm_gen(name='gennorm',  argsreduce_method = 'experimental')
 
 
 class halfgennorm_gen(rv_continuous):
@@ -8561,7 +8561,7 @@ class halfgennorm_gen(rv_continuous):
         return 1.0/beta - np.log(beta) + sc.gammaln(1.0/beta)
 
 
-halfgennorm = halfgennorm_gen(a=0, name='halfgennorm')
+halfgennorm = halfgennorm_gen(a=0, name='halfgennorm',  argsreduce_method = 'experimental')
 
 
 class crystalball_gen(rv_continuous):
@@ -8708,7 +8708,7 @@ class crystalball_gen(rv_continuous):
         return (m > 1) & (beta > 0)
 
 
-crystalball = crystalball_gen(name='crystalball', longname="A Crystalball Function")
+crystalball = crystalball_gen(name='crystalball', longname="A Crystalball Function",  argsreduce_method = 'experimental')
 
 
 def _argus_phi(chi):
