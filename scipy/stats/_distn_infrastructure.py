@@ -537,20 +537,14 @@ def argsreduce_classic(cond, *args):
     >>> B = 2
     >>> C = rand((1, 5))
     >>> cond = np.ones(A.shape)
-    >>> [A1, B1, C1] = argsreduce(cond, A, B, C)
-    >>> A1.shape
-    (4, 5)
+    >>> [A1, B1, C1] = argsreduce_classic(cond, A, B, C)
     >>> B1.shape
     (1,)
     >>> C1.shape
     (1, 5)
     >>> cond[2,:] = 0
-    >>> [A1, B1, C1] = argsreduce(cond, A, B, C)
-    >>> A1.shape
-    (15,)
-    >>> B1.shape
-    (1,)
-    >>> C1.shape
+    >>> [A2, B2, C2] = argsreduce_classic(cond, A, B, C)
+    >>> B2.shape
     (15,)
     """
     # some distributions assume arguments are iterable.
@@ -578,20 +572,36 @@ def argsreduce_experimental(cond, *args):
     >>> B = 2
     >>> C = rand((1, 5))
     >>> cond = np.ones(A.shape)
-    >>> [A1, B1, C1] = argsreduce(cond, A, B, C)
+    >>> [A1, B1, C1] = argsreduce_experimental(cond, A, B, C)
+    >>> A1.shape
+    (4, 5)
     >>> B1.shape
-    (20,)
+    (1,)
+    >>> C1.shape
+    (1, 5)
     >>> cond[2,:] = 0
-    >>> [A2, B2, C2] = argsreduce(cond, A, B, C)
-    >>> B2.shape
+    >>> [A1, B1, C1] = argsreduce_experimental(cond, A, B, C)
+    >>> A1.shape
     (15,)
-
+    >>> B1.shape
+    (1,)
+    >>> C1.shape
+    (15,)
     """
-    newargs = np.atleast_1d(*args)
+    newargs = np.atleast_1d(*args) # some distributions assume arguments are iterable.
+
+    # np.atleast_1d returns an array if only one argument, or a list of arrays if more than one argument.
     if not isinstance(newargs, list):
         newargs = [newargs, ]
-    expand_arr = (cond == cond)
-    return [np.extract(cond, arr1 * expand_arr) for arr1 in newargs]
+    if np.all(cond):
+        return newargs         # Nothing to do
+
+    s = cond.shape
+    # np.extract returns flattened arrays, which are not broadcastable together unless they
+    # are either the same size or size == 1.
+    return  [(arg if np.size(arg) == 1
+            else np.extract(cond, np.broadcast_to(arg, s)))
+        for arg in newargs]
 
     if np.all(cond):
         # Nothing to do
