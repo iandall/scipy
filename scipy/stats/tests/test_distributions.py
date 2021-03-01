@@ -2970,27 +2970,37 @@ class TestEntropy(object):
 
 
 class TestArgsreduce():
-    def argsreduce_core(f):
+
+    def test_argsreduce_classic(self):
         a = array([1, 3, 2, 1, 2, 3, 3])
-        b, c = f(a > 1, a, 2)
+        b, c = argsreduce_classic(a > 1, a, 2)
 
         assert_array_equal(b, [3, 2, 2, 3, 3])
         assert_array_equal(c, [2, 2, 2, 2, 2])
 
-        b, c = f(2 > 1, a, 2)
+        b, c = argsreduce_classic(2 > 1, a, 2)
         assert_array_equal(b, a[0])
         assert_array_equal(c, [2])
 
-        b, c = f(a > 0, a, 2)
+        b, c = argsreduce_classic(a > 0, a, 2)
         assert_array_equal(b, a)
         assert_array_equal(c, [2] * numpy.size(a))
-
-    def test_argsreduce_classic(self):
-        TestArgsreduce.argsreduce_core(argsreduce_classic)
         
     def test_argsreduce_experimental(self):
-        TestArgsreduce.argsreduce_core(argsreduce_experimental)
-    
+        a = array([1, 3, 2, 1, 2, 3, 3])
+        b, c = argsreduce_experimental(a > 1, a, 2)
+
+        assert_array_equal(b, [3, 2, 2, 3, 3])
+        assert_array_equal(c, [2])
+
+        b, c = argsreduce_experimental(2 > 1, a, 2)
+        assert_array_equal(b, a)
+        assert_array_equal(c, [2])
+
+        b, c = argsreduce_experimental(a > 0, a, 2)
+        assert_array_equal(b, a)
+        assert_array_equal(c, [2])
+  
 
 class TestFitMethod(object):
     skip = ['ncf', 'ksone', 'kstwo']
